@@ -1,0 +1,86 @@
+Exercises
+
+The solution files for these exercises are in the AD141-apps repository, within the collections/solutions directory.
+Exercise 1
+
+Given the following two lists:
+
+first = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+second = ["day", "day", "sday", "nesday", "rsday", "day", "urday"]
+
+    Concatenate the two lists by index into a new list that, when printed, looks as follows:
+
+["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+Exercise 2
+
+Write a program that creates a loop asking the user to input a number.
+
+    Repeat this process until the user enters the value end.
+
+        The following can be used to loop through the user input.
+
+prompt = "Enter a number (or the word 'end' to quit) "
+while True:
+    data = input(prompt)
+    if data == "end":
+        break
+    #Remainder of while loop goes here
+
+    Add each iteration number to a list.
+
+    Just before the program ends, print the following:
+
+        The contents of the list on one line
+
+        The sum of the elements in the list on the second line
+
+Exercise 3
+
+Write a program that creates a loop asking the user to input a number.
+
+    Repeat this process until the user enters the value end.
+
+    Enter each number into a set.
+
+        Before you enter the number, verify if the number is already in the set.
+
+        If the number is already in the set, then update a counter that tracks how many entries are not added to the set.
+
+    Just before the program ends, print the following:
+
+        The contents of the set on one line
+
+        The number of elements that were NOT added to the set on the second line
+
+Exercise 4
+
+Use a single set to determine the number of unique words in the user's input.
+
+    You can use the same sample while loop from Exercise 1.
+
+        Each time through the loop, the individual words should be added to the single set.
+
+    When done looping, output the contents of the set sorted alphabetically.
+
+    Also, output the number of unique words.
+
+Exercise 5
+
+Use a dictionary to create a mapping from the digits 0-9 to the words zero, one, two, etc.
+
+    Next, ask the user to input a number.
+
+    If the user enters 1437, then the program should print one four three seven. 
+
+Exercise 6
+
+Rewrite Exercise 4 to count the frequency of each word in the user's input.
+
+    A dict provides the perfect data structure for this problem.
+
+        Let the words be the keys, and let the counts be the values.
+
+    Print the results sorted by the words.
+
+    Finally, print the results sorted by the counts.
