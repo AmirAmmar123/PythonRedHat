@@ -1,0 +1,46 @@
+Working With Files and Directories
+
+When reading and writing files, the os and os.path modules provide a variety of functions for working with files and directories.
+
+Table 8.3. os Module
+Name	Behavior
+os.chdir() 	Changes the current working directory.
+os.getcwd() 	Returns a string representing the current working directory.
+os.listdir() 	Returns a list containing the names of the entries in a directory.
+os.mkdir() 	Creates a directory for a given path.
+os.makedirs() 	Recursive directory creation, creates all intermediate-level directories required to contain the leaf directory.
+os.remove() 	Deletes a file path. If the path is a directory, then an OSError exception is raised.
+os.rmdir() 	Deletes the directory path. It only works when the directory is empty.
+os.rename() 	Renames a file or directory.
+os.chown() 	Changes the owner and group ID of a given path.
+os.chmod() 	Changes the mode of a given path.
+os.stat() 	Gets the status of a file as an os.stat_result object.
+os.getenv() 	Returns the value of an environment variable.
+os.path.isabs() 	Returns True if the path is an absolute pathname.
+os.path.isfile() 	Returns True if the path is an existing regular file.
+os.path.isdir() 	Returns True if the path is an existing directory.
+os.path.dirname() 	Returns the directory name of a path name.
+os.path.exists() 	Returns True if the path refers to an existing path or an open file descriptor.
+os.path.getsize() 	Returns the size, in bytes, of a given path.
+os.path.join() 	Joins one or more path components by using the property directory separator.
+
+The os.stat_result object has the following properties.
+
+Table 8.4. os.stat Object Properties
+Index	Attribute	Meaning
+0 	st_mode 	File mode (type and permissions).
+1 	st_ino 	The inode number.
+2 	st_dev 	Device number of the file system.
+3 	st_nlink 	Number of hard links to the file.
+4 	st_uid 	Numeric user ID of file's owner.
+5 	st_gid 	Numerical group ID of file's owner.
+6 	st_size 	Size of the file in bytes. Same value as the one returned by os.path.getsize().
+7 	st_atime 	Last access time (seconds since epoch). Same value as the one returned by os.path.getatime().
+8 	st_mtime 	Last modify time (seconds since epoch). Same value as the one returned by os.path.getmtime().
+9 	st_ctime 	
+
+Linux: Last inode change time (seconds since epoch).
+
+Windows: Creation time (seconds since epoch). Same value as the one returned by os.path.getctime().
+
+The following application demonstrates many of the functions available in the os and os.path modules.

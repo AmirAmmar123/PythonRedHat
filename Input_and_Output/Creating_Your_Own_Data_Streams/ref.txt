@@ -1,0 +1,45 @@
+Creating Your Own Data Streams
+
+The built-in open() function opens a file and returns a data stream.
+
+When opening a data stream, you must declare it as an input data stream, or as an output data stream.
+
+If the open() function fails, then a subclass of OSError is raised.
+
+The open() function accepts multiple arguments:
+
+    It has a required string as its first argument, representing the name of the file.
+
+    There is also an optional argument named mode, that among other things is used to declare the type of data stream it should create.
+
+References
+
+A complete list of named arguments and their meanings can be found in the documentation for the open() function here: https://docs.python.org/3/library/functions.html#open
+
+The following table lists the different values that can be used to specify the mode in which the file is opened.
+
+Table 8.1. File Opening Modes
+Mode	File Opened For:
+r 	Reading (default). It fails if the file does not exist.
+w 	Writing. It truncates the file if it already exists.
+x 	Exclusive creation. It fails if the file already exists (added in Python 3.3).
+a 	Appending to end of file. It creates the file if it does not exist.
+b 	Binary mode.
+t 	Text mode (default).
++ 	Updating (reading and writing).
+
+    As an example, mode="w+b" would open a file for binary read-write access.
+
+    Once a stream is opened, various methods can then be used to read and write files.
+
+Writing to a Text File
+
+Here is a simple program that writes data to a file.
+
+    When the program is run, the print statements output information about the stream returned by the call to open().
+
+    The calls to write() will output to the file rather than the display.
+
+    Finally, the close() function closes the stream.
+
+        It is always recommended to close a stream you opened after you are finished processing it.
