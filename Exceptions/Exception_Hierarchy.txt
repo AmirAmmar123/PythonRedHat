@@ -1,0 +1,34 @@
+BaseException
++-- SystemExit
++-- KeyboardInterrupt
++-- GeneratorExit
++-- Exception
+     +-- StopIteration, StopAsyncIteration, AssertionError, AttributeError
+     +-- BufferError, EOFError, ImportError, MemoryError, ReferenceError
+     +-- SystemError, TypeError
+     +-- ArithmeticError
+     |    +-- FloatingPointError, OverflowError, ZeroDivisionError
+     +-- LookupError
+     |    +-- IndexError, KeyError
+     +-- NameError
+     |    +-- UnboundLocalError
+     +-- OSError
+     |    +-- BlockingIOError, ChildProcessError, FileExistsError
+     |    +-- FileNotFoundError, InterruptedError, IsADirectoryError
+     |    +-- NotADirectoryError, PermissionError, ProcessLookupError
+     |    +-- TimeoutError
+     |    +-- ConnectionError
+     |    | +-- BrokenPipeError, ConnectionAbortedError
+     |    | +-- ConnectionRefusedError, ConnectionResetError
+     +-- RuntimeError
+     |   +-- NotImplementedError, RecursionError
+     +-- SyntaxError
+     |    +-- IndentationError
+     |         +-- TabError
+     +-- ValueError
+     |    +-- UnicodeError
+     |         +-- UnicodeDecodeError, UnicodeEncodeError, UnicodeTranslateError
+     +-- Warning
+          +-- DeprecationWarning, PendingDeprecationWarning, RuntimeWarning
+          +-- SyntaxWarning, UserWarning, FutureWarning, ImportWarning
+          +-- UnicodeWarning, BytesWarning, ResourceWarning
