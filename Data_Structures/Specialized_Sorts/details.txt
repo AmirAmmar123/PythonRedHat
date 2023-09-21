@@ -1,0 +1,33 @@
+Several examples throughout the course have shown the use of the sort() method of a list and the top level sorted() function.
+
+    Sorting a sequence such as a list or a tuple first compares the first two items, and if they differ this determines the outcome of the comparison.
+
+        If they are equal, the next two items are compared, and so on, until either sequence is exhausted.
+
+    This n-ary level of sorting is demonstrated in the tertiary sort of the two-dimensional list shown below.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> thelist = [[1,1,7], [1,1,1], [1,2,3], [1,2,1], [2,1,1], [1,2,2]]
+>>> thelist.sort()
+>>> print(thelist)
+[[1, 1, 1], [1, 1, 7], [1, 2, 1], [1, 2, 2], [1, 2, 3], [2, 1,
+1]]
+>>> quit()
+$
+
+The ability of a sequence to be sorted to any level provides additional capabilities when calling the sort() method and sorted() function with the key parameter.
+
+    The following example demonstrates a tertiary sort of customer's information.
+
+        The primary sort will be by state.
+
+        If the states match, the secondary sort will be by last name.
+
+        If the last names match, the tertiary sort will be by first name.
+
+    This is accomplished by defining a lambda function that takes a list of strings pertaining to the customer and returns a tuple of the state, last name and first name.
+
+    The application reuses the get_customers() function from the customer_functions module defined earlier in the chapter.
