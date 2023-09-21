@@ -1,0 +1,564 @@
+Chapter 7.  Exceptions
+
+Exceptions
+Summary
+
+Abstract
+
+Goal 	
+
+Create, handle, and throw exceptions to control errors.
+Objectives 	
+
+    Understand and use the Python exception model.
+
+    Use try and except as the basic exception handling clauses in Python.
+
+    Understand and use various exceptions in the exception hierarchy.
+
+    Raise exceptions within your code as indicators of errors happening when executing the code.
+
+    Create and use user-defined exceptions within your code.
+
+    Understand the assert keyword and its benefits when writing your code.
+
+Sections 	
+
+    Exceptions
+
+Exceptions
+Objectives
+
+    Understand and use the Python exception model.
+
+    Use try and except as the basic exception handling clauses in Python.
+
+    Understand and use various exceptions in the exception hierarchy.
+
+    Raise exceptions within your code as indicators of errors happening when executing the code.
+
+    Create and use user-defined exceptions within your code.
+
+    Understand the assert keyword and its benefits when writing your code.
+
+Errors and Exceptions
+
+Python has two main kinds of errors: syntax errors and exceptions.
+
+    Syntax errors are caught by the parser as the script is being interpreted.
+
+    Python displays the file name and line number, so you know where to look to find the error.
+
+    Even if the program is free of syntax errors, things can still go wrong during the execution of the program.
+
+    Errors detected during execution are called exceptions.
+
+    When your code raises an exception, if the exception is not handled, then the program terminates.
+
+    You can handle exceptions to recover from errors and allow the program to continue its execution.
+
+For example, consider the following program, which expects a series of integers, and outputs the sum of those integers.
+
+totals.py
+
+#!/usr/bin/env python3
+def main():
+    total = 0
+    msg = "Please enter a number, or 'end' to quit: "
+    while True:
+        value = input(msg)
+        if value == "end":
+            break
+        total += int(value)
+
+    print("Total is", total)
+
+
+if __name__ == "__main__":
+    main()
+
+If the user enters non-integer data (other than the end string), then the program raises an exception and the program terminates, as shown in the following execution output:
+
+$ python3 totals.py
+Please enter a number, or 'end' to quit: 3
+Please enter a number, or 'end' to quit: 5
+Please enter a number, or 'end' to quit: 7
+Please enter a number, or 'end' to quit: one
+Traceback (most recent call last):
+  File "totals.py", line 15, in <module>
+    main()
+  File "totals.py", line 9, in main
+    total += int(value)
+ValueError: invalid literal for int() with base 10: 'one'
+$
+
+    When the user enters a value of one as the input, the call to int() raises a ValueError exception.
+
+    The default Python runtime response to an exception is to print a stack trace (or stack traceback) and terminate the program.
+
+    The stack trace includes information about the file, line number, and method or function the exception occurred in.
+
+    The last line of the error message indicates what happened.
+
+    The actual details are based on the exception type.
+
+    The following output shows what happens when the end-of-transmission character (Ctrl+D) is typed at the input prompt.
+
+$ python3 totals.py
+Please enter a number, or 'end' to quit: Traceback (most recent call
+last)
+   File "totals.py", line 15, in <module>
+     main()
+   File "totals.py", line 6, in main
+    value = input(msg)
+EOFError
+$
+
+    The resulting exception raised in the preceding program is an EOFError exception.
+
+    If developers wish to respond in their own way, then exception handling must be added to the program.
+
+    To handle error scenarios, and prevent your program from crashing, you must use exception handling.
+
+The Exception Model
+
+In Python, the exception model consists of the following.
+
+    A try statement is used to surround code that may generate one or more exceptions.
+
+    try statements can specify the following:
+
+        One or more except clauses that serve as exception handlers.
+
+        An else clause that only runs if no exception occurs.
+
+        A finally clause that runs whether an exception is raised or not.
+
+    A try statement cannot stand by itself.
+
+        It must be followed by an except clause or a finally clause.
+
+        If followed by an except clause, it may then optionally define additional except clauses, an else clause, and/or a finally clause.
+
+The following example is a rewrite of the previous application. This version incorporates Python's exception handling model.
+
+totals_handled.py
+
+#!/usr/bin/env python3
+def main():
+    total = 0
+    while True:
+        value = input("Please enter a number: ")
+        if value == "end":
+            break
+        try:
+            total += int(value)
+        except ValueError:
+            print("Invalid Number - Please try again")
+
+    print("Total is", total)
+
+
+if __name__ == "__main__":
+    main()
+
+    Now, when an illegal value is entered, the program handles the exception, after which the program is able to continue.
+
+Exception Handling
+
+The combination of try and except clauses can occur in various parts of your program.
+
+Exceptions are instances of the Exception class, so you can treat them as any other object.
+
+    To get the reference of an exception object in an except clause, use the as keyword, as the following example demonstrates:
+
+handled_separately.py
+
+#!/usr/bin/env python3
+def main():
+    total = 0
+    while True:
+        try:
+            value = input("Please enter a number: ")
+            if value == "end":
+                break
+        except EOFError:
+            print('Unexpected End of Stream')
+            continue
+        try:
+            total += int(value)
+        except ValueError as ve:
+            print("Exception: ", ve)
+        finally:
+            print("Running subtotal is:", total)
+
+    print("Total is", total)
+
+
+if __name__ == "__main__":
+    main()
+
+In the preceding example, the except ValueError as ve clause gets the reference of the ValueError exception in the ve variable, to use it in the print() statement.
+
+Also, Python always executes the finally clause, whether the call to int() throws an exception or not.
+
+Exception Hierarchy
+
+    The hierarchy of Python built-in exceptions is as follows.
+
+BaseException
++-- SystemExit
++-- KeyboardInterrupt
++-- GeneratorExit
++-- Exception
+     +-- StopIteration, StopAsyncIteration, AssertionError, AttributeError
+     +-- BufferError, EOFError, ImportError, MemoryError, ReferenceError
+     +-- SystemError, TypeError
+     +-- ArithmeticError
+     |    +-- FloatingPointError, OverflowError, ZeroDivisionError
+     +-- LookupError
+     |    +-- IndexError, KeyError
+     +-- NameError
+     |    +-- UnboundLocalError
+     +-- OSError
+     |    +-- BlockingIOError, ChildProcessError, FileExistsError
+     |    +-- FileNotFoundError, InterruptedError, IsADirectoryError
+     |    +-- NotADirectoryError, PermissionError, ProcessLookupError
+     |    +-- TimeoutError
+     |    +-- ConnectionError
+     |    | +-- BrokenPipeError, ConnectionAbortedError
+     |    | +-- ConnectionRefusedError, ConnectionResetError
+     +-- RuntimeError
+     |   +-- NotImplementedError, RecursionError
+     +-- SyntaxError
+     |    +-- IndentationError
+     |         +-- TabError
+     +-- ValueError
+     |    +-- UnicodeError
+     |         +-- UnicodeDecodeError, UnicodeEncodeError, UnicodeTranslateError
+     +-- Warning
+          +-- DeprecationWarning, PendingDeprecationWarning, RuntimeWarning
+          +-- SyntaxWarning, UserWarning, FutureWarning, ImportWarning
+          +-- UnicodeWarning, BytesWarning, ResourceWarning
+
+As seen from the previous list of exceptions, there are many different exception types in Python.
+
+    You can handle multiple exception types in a single except block by handling the parent class type.
+
+multi.py
+
+#!/usr/bin/env python3
+def main():
+    names = ['Mike', 'John',  'Jane',  'Alice']
+    themap = {'Mike': 15, 'Chris': 10, 'Dave': 25}
+
+    while True:
+        try:
+            value = input("Enter an integer: ")
+            if value == "end":
+                break
+            value = int(value)
+            print("Name is: " + names[value])
+            name = input("Enter a name: ")
+            print(name, " => ", themap[name])
+        except ValueError:
+            print("Value Error: non numeric data")
+        except (KeyError, IndexError) as err:
+            # Above could be written as:
+            #      except LookupError as err:
+            print("Illegal value:", err)
+        except Exception:
+            print("Unknown Exception: ")
+
+
+if __name__ == "__main__":
+    main()
+
+Raising Exceptions
+
+Python provides the raise statement, allowing the programmer to force a specified exception to occur.
+
+    Several basic examples of this are demonstrated below in an interactive shell.
+
+    Most of the examples use the raise keyword followed by an instance of an exception object.
+
+    The last example simply uses the raise keyword by itself to reraise the exception after handling it.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> raise Exception()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+Exception
+>>>
+>>> raise Exception("There was a problem")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+Exception: There was a problem
+>>>
+>>> raise ValueError("Bad value 'one'")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: Bad value 'one'
+>>>
+>>> try:
+...     int("one")
+... except ValueError:
+...     print("Not a Number")
+...     raise
+...
+Not a Number
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+ValueError: invalid literal for int() with base 10: 'one'
+>>> exit()
+$
+
+    The following example is a rewrite of the custom Fraction class defined previously.
+
+    It incorporates raising a built-in exception for a denominator of zero.
+
+fraction.py
+
+#!/usr/bin/env python3
+class Fraction:
+    def __init__(self, numerator=0, denominator=1):
+        self.numerator = numerator
+        self.denominator = denominator
+
+    @property
+    def denominator(self):
+        return self._denominator
+
+    @denominator.setter
+    def denominator(self, denominator):
+        if denominator == 0:
+            raise ZeroDivisionError()
+        self._denominator = denominator
+
+    def __str__(self):
+        return "{}/{}".format(self.numerator, self.denominator)
+
+fraction_test.py
+
+#!/usr/bin/env python3
+from fraction import Fraction
+
+
+def main():
+    try:
+        while True:
+            numer = int(input("Please enter a numerator"))
+            denom = int(input("Please enter a denominator"))
+            fraction = Fraction(numer, denom)
+            print(fraction)
+    except ZeroDivisionError:
+        print("Zero Division Error")
+
+
+if __name__ == "__main__":
+    main()
+
+    When an appropriate built-in exception does not exist to sufficiently convey the nature of a problem, you can define your own exceptions by creating a new exception class.
+
+User-Defined Exceptions
+
+Exceptions should typically be derived from the Exception class, either directly or indirectly.
+
+    The base class for built-in exceptions is the BaseException class.
+
+    User-defined classes should not inherit from BaseException, but from the Exception class.
+
+    User-defined exceptions can do anything that any other class can do, but are usually kept simple.
+
+The following example defines several user-defined exceptions to represent the various forms of a password that are not acceptable.
+
+    The first exception is designed to be the base class for all exceptions that pertain to passwords.
+
+        All other exceptions will extend the defined base class.
+
+    The exceptions defined within the module can then be used by any application that deals with checking to see if a password meets given criteria to be considered acceptable.
+
+        The exceptions classes themselves do not actually do any of the checking.
+
+        They are simply defined to represent the various types of potential problem passwords.
+
+password_errors.py
+
+#!/usr/bin/env python3
+class PasswordError(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+
+class TrivialPasswordError(PasswordError):
+    """Passwords that are too Trivial like: 'password'"""
+    def __init__(self, msg):
+        super().__init__("Trivial Password:" + msg)
+
+
+class PasswordLengthError(PasswordError):
+    """Passwords that do not meet certain length criteria"""
+    def __init__(self, msg, length):
+        super().__init__(msg)
+        self.length = length
+
+    def get_length(self):
+        return self.length
+
+
+class RepetetiveError(PasswordError):
+    """Passwords that have repetitive characters"""
+    def __init__(self, msg):
+        super().__init__(msg)
+
+With the above hierarchy of PasswordError exceptions available, an application can now be written to raise any of them as needed when validating the syntax of a password.
+
+    The following example presents a utilities module with several functions that check the validity of a password.
+
+    This is done so that many different applications can utilize the behavior defined within the module.
+
+    This module defines the various criteria of what constitutes a valid password.
+
+    Each function defined in the module simply raises a particular subclass of PasswordError if an error is detected.
+
+password_utilities.py
+
+#!/usr/bin/env python3
+import password_errors
+
+
+def check_trivial(password):
+    bad = ["password", "p@ssword", "passw0rd", "p@ssw0rd"]
+    if password.lower() in bad:
+        raise password_errors.TrivialPasswordError(password)
+
+
+def check_length(password):
+    min_length = 10
+    length = len(password)
+    if length < min_length:
+        raise password_errors.PasswordLengthError("Too short", length)
+
+
+def check_duplicates(password):
+    removedupes = set(password)
+    if len(removedupes) < len(password):
+        raise password_errors.RepetetiveError("Repetetive Characters Exist")
+
+The following example shows how you can you use the password checks and the exceptions in an application.
+
+password_tests.py
+
+#!/usr/bin/env python3
+from password_errors import PasswordError
+from password_utilities import check_trivial, check_length, check_duplicates
+
+
+def check_password(password):
+    check_trivial(password)
+    check_length(password)
+    check_duplicates(password)
+
+
+def main():
+    while True:
+        try:
+            line = input("Please enter a password")
+            check_password(line)
+            print("That would be a valid password")
+        except PasswordError as pe:
+            print("Password Error: ", pe)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print()
+        print("Terminating Program")
+    except Exception as e:
+        print("Unknown Issue:", e)
+
+The assert statement
+
+An assertion is a way to check that the internal state of a program is as the programmer expected.
+
+    Assertions are expressions that evaluate to either True or False.
+
+assert statements allow a way to insert debugging assertions.
+
+    If an assert statement evaluates to False, then an AssertionError exception is raised.
+
+    If the assert statement evaluates to True, control flow passes to the next statement.
+
+The general syntax for an assert statement is as follows.
+
+assert expression1["," message]
+
+    The required expression1 is the part of the statement that should evaluate to True or False.
+
+    The optional , message is a message to include in the AssertionError that might get generated.
+
+assert_demo.py
+
+#!/usr/bin/env python3
+def findmax(a, b):
+    max = 0
+    if a < b:
+        max = b
+    elif a > b:
+        max = a
+
+    fmt = "Max is not {} or {}"
+    assert max == a or max == b, fmt.format(a, b)
+    return max
+
+
+def main():
+    try:
+        print(findmax(2, 9), findmax(7, 4))
+        print(findmax(3, 3))
+    except AssertionError as ae:
+        print("Assertion Failed:", ae)
+
+
+if __name__ == "__main__":
+    main()
+
+Exercises
+
+The solution files for these exercises are in the AD141-apps repository, within the exceptions/solutions directory.
+Exercise 1
+
+Create a list in your program that has 10 numbers.
+
+    Then, in a loop, ask the user for a number.
+
+    Use this number as an index into your list and print the value located at that index.
+
+    End the program when the user enters end.
+
+    Handle the case of an illegal number.
+
+    Handle the case of an illegal subscript.
+
+Exercise 2
+
+Test Exercise 1 again by using a few negative numbers as the index.
+
+    Eliminate negative numbers as legitimate subscripts by raising the IndexError exception when a negative number is given.
+
+Exercise 3
+
+Write a program that uses a loop to prompt the user and get an integer value.
+
+    The program should print the sum of all the integers entered.
+
+    If the user enters a blank line or any other line that cannot be converted to an integer, the program should handle this ValueError.
+
+    If the user uses Ctrl+C to terminate the program, then it should be trapped with a KeyboardInterrupt, and a suitable message should be printed.
+
+    When the user enters the end of file character (Ctrl+D on Linux or Ctrl+Z on Windows), the program should trap this with the EOFError, break out of the loop, and print the sum of all the integers.
