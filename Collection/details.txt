@@ -1,0 +1,1019 @@
+Chapter 3.  Collections
+
+Collections
+Summary
+
+Abstract
+
+Goal 	
+
+Use standard and efficient data access types to store data.
+Objectives 	
+
+    Write Python programs by using the various Python collection types.
+
+    Use lists to store and manipulate ordered collections of objects.
+
+    Use tuples to store and retrieve immutable collections of objects.
+
+    Use sets to store and manipulate unordered collections of unique objects.
+
+    Use dictionaries to perform quick lookups on collections of objects.
+
+    Sort the various collection data types in a variety of ways.
+
+Sections 	
+
+    Collections
+
+Collections
+Objectives
+
+    Write Python programs by using the various Python collection types.
+
+    Use lists to store and manipulate ordered collections of objects.
+
+    Use tuples to store and retrieve immutable collections of objects.
+
+    Use sets to store and manipulate unordered collections of unique objects.
+
+    Use dictionaries to perform quick lookups on collections of objects.
+
+    Sort the various collection data types in a variety of ways.
+
+Introduction
+
+Python provides the following general purpose built-in classes that represent standard collection data types.
+
+    list
+
+        An ordered collection of elements
+
+        Similar to an array in other languages
+
+        Dynamic. A list can grow or shrink based on the needs of the application
+
+    tuple
+
+        An immutable list 
+
+    set
+
+        An unordered collection of elements
+
+        Does not permit duplicates
+
+    dict
+
+        A dictionary is a collection of key-value pairs
+
+        The keys of a dictionary have to be unique
+
+        As of Python 3.7, dictionary values are stored in insertion order.
+
+The list and tuple data structures are also called sequences, because they support efficient element access using integer indices (slice notation).
+
+Each of the preceding collections has a constructor that can be used to create an empty instance of the data type or as a conversion method from one collection to another.
+
+    list()
+
+    tuple()
+
+    set()
+
+    dict() 
+
+Lists
+
+A list is an ordered sequence with zero or more objects.
+
+You can create lists in several ways.
+
+    By using the list() constructor.
+
+    By using a pair of square brackets to denote the empty list ([]).
+
+    By using square brackets, separating items with commas.
+
+The elements in a list can be a mix of any types.
+
+Once created, the slice notation can be used to reference element(s) of a list.
+
+The next example demonstrates creating and accessing several lists.
+
+creating_lists.py
+
+#!/usr/bin/env python3
+listA = list()
+listB = []
+listC = [20, 3, 7, 82, -3, 456, 3, 65, 23]
+listD = ["James", "Heather", "Monica", "Eugene"]
+listE = listC + listD
+print(listA, listB, listC, listD, listE, sep="\n")
+print("Indexing:", listC[0], listC[-1], listD[2], listE[4])
+sub_list = listC[0:5]
+print(type(sub_list), sub_list)
+print(listE[-5:])
+
+The output of the above program is shown next.
+
+$ python3 creating_lists.py
+[]
+[]
+[20, 3, 7, 82, -3, 456, 3, 65, 23]
+['James', 'Heather', 'Monica', 'Eugene']
+[20, 3, 7, 82, -3, 456, 3, 65, 23, 'James', 'Heather', 'Monica', 'Eugene']
+Indexing: 20 23 Monica -3
+<class 'list'> [20, 3, 7, 82, -3]
+[23, 'James', 'Heather', 'Monica', 'Eugene']
+$
+
+A list is dynamic and as such can grow and/or shrink as needed.
+
+    Adding, deleting, and updating elements are common operations performed on a list.
+
+    The next example demonstrates various methods that you can use on a list to modify its contents.
+
+working_with_lists.py
+
+#!/usr/bin/env python3
+numbers = [10, 20, 30, 40, 20, 50]
+fmt = "{0:>24} {1}"
+print(fmt.format("Original:", numbers))
+print(fmt.format("Pop Last Element:", numbers.pop()))
+print(fmt.format("Pop Element at pos# 2:", numbers.pop(2)))
+print(fmt.format("Resulting List:", numbers))
+
+numbers.append(100)
+print(fmt.format("Appended 100:", numbers))
+numbers.remove(20)
+print(fmt.format("Removed First 20:", numbers))
+numbers.insert(1, 1000)
+print(fmt.format("Inserted 1000 at pos# 1:", numbers))
+
+numbers.reverse()
+print(fmt.format("Reversed:", numbers))
+numbers.sort()
+print(fmt.format("Sorted:", numbers))
+numbers[0] = -99
+print(fmt.format("Modified:", numbers))
+
+The output of the above program is shown next.
+
+$ python3 working_with_lists.py
+               Original: [10, 20, 30, 40, 20, 50]
+       Pop Last Element: 50
+  Pop Element at pos# 2: 30
+         Resulting List: [10, 20, 40, 20]
+           Appended 100: [10, 20, 40, 20, 100]
+       Removed First 20: [10, 40, 20, 100]
+Inserted 1000 at pos# 1: [10, 1000, 40, 20, 100]
+               Reversed: [100, 20, 40, 1000, 10]
+                 Sorted: [10, 20, 40, 100, 1000]
+               Modified: [-99, 20, 40, 100, 1000]
+$
+
+The elements of a list can be unpacked into individual variables. Referencing specific elements as variables is often easier to understand than referencing list elements by index.
+
+unpacking_lists.py
+
+#!/usr/bin/env python3
+days = ["Monday", "Tuesday", "Wednesday", "Thursday",
+        "Friday"]
+mon, tue, wed, thu, fri = days
+print(mon, fri)
+
+$ python3 unpacking_lists.py
+Monday Friday
+$
+
+Looping through a list is typically accomplished with a for loop.
+
+list_loops.py
+
+#!/usr/bin/env python3
+numbers = [10, 20, 30, 40, 50]
+
+# Looping by element
+for number in numbers:
+    print(number, end="\t")
+print()
+
+# Looping by index and
+# updating list's values at the same time
+for index in range(len(numbers)):
+    numbers[index] *= 10
+
+for number in numbers:
+    print(number, end="\t")
+print()
+
+The output of the preceding program is shown next.
+
+$ python3 list_loops.py
+10   20   30   40   50
+100  200  300  400  500
+$
+
+Tuples
+
+A tuple is an ordered immutable collection.
+
+    A tuple is somewhat like a list, but it is typically more efficient, because it cannot shrink, grow, or be changed in any other way.
+
+    All of the immutable operations that can be performed on a list can also be performed on a tuple.
+
+You can create tuples in several ways.
+
+    By using the tuple() constructor.
+
+    By using a pair of parenthesis to denote the empty tuple (()).
+
+    By using parenthesis, separating items with commas.
+
+The enumerate() constructor can be useful when looping through a collection and needing the index of the element being processed at the same time.
+
+    Each time through the loop, the enumerate object returns a tuple containing a count (from start, which defaults to 0) and the values obtained from iterating over the iterable object passed to it.
+
+    This is often simpler than obtaining the length of the iterable object with the len() function and passing it to the range() constructor to loop through by index as in the previous example.
+
+The following demonstrates tuple objects and using enumerate().
+
+tuple_loops.py
+
+#!/usr/bin/env python3
+grades = ("A", "B", "C", "D", "F")
+points = ("90-100", "80-89", "70-79", "60-69", "00-59")
+for grade in grades:
+    print(grade, end="\t")
+print()
+
+for a_tuple in enumerate(grades):
+    print(a_tuple[0], ":", a_tuple[1], end="\t")
+print()
+
+# Unpacking the tuple from enumerate
+for i, grade in enumerate(grades, start=1):
+    print(i, ":", grade, end="\t")
+print()
+
+# Process the two tuples in parallel
+for index, grade in enumerate(grades):
+    print(grade, ":", points[index])
+
+The output of the preceding program is as follows:
+
+$ python3 tuple_loops.py
+A       B       C       D       F
+0 : A   1 : B   2 : C   3 : D   4 : F
+1 : A   2 : B   3 : C   4 : D   5 : F
+A : 90-100
+B : 80-89
+C : 70-79
+D : 60-69
+F : 00-59
+
+Sets
+
+A set is an unordered collection with no duplicates.
+
+    A set can be created by using the set() constructor.
+
+    A set can also be initialized using curly braces {}, separating items with commas.
+
+    Any duplicate entries will be removed when the set is created.
+
+If you pass a string to the set() constructor, then each character of the string will become an element of the set, with duplicates removed.
+
+The following example demonstrates various ways of creating a set.
+
+creating_sets.py
+
+#!/usr/bin/env python3
+setA = set()
+print(len(setA), ":", setA)
+setB = set("mississippi")
+print(len(setB), ":", setB)
+setC = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
+print(len(setC), ":", setC)
+
+The output of the preceding example is shown next.
+
+$ python3 creating_sets.py
+0 : set()
+4 : {'i', 'p', 's', 'm'}
+7 : {'Sun', 'Thu', 'Mon', 'Wed', 'Fri', 'Sat', 'Tue'}
+$
+
+The in operator is often used for membership testing in a set.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> fruit = {"apple", "orange", "pear", "kiwi"}
+>>> print("orange" in fruit, ":", "crabgrass" in fruit)
+True : False
+>>> exit()
+$
+
+The following methods can also be called on a set.
+
+    The add() method adds an element to the set.
+
+    The update() method adds the elements of any iterable object passed to it as a parameter.
+
+    The remove() method removes an element from the set.
+
+        Raises a KeyError exception if element to remove is not present.
+
+    The discard() method also removes an element from the set.
+
+        This method does not raise any exception if an attempt is made to discard an element that does not exist.
+
+    The pop() method removes and returns an arbitrary element.
+
+        Raises a KeyError exception if the set is empty.
+
+    The clear() method removes all the elements from a set.
+
+    The issuperset() and issubset() methods can be used to test membership between two different sets.
+
+The following mathematical set operators and equivalent methods are available, as well, when working with sets.
+
+Table 3.1. Mathematical Set Operators and Methods
+Operator	Method	Description
+¦ (vertical bar)	union() 	Returns a new set with elements from the set and all others.
+& (ampersand)	intersection() 	Returns a new set with elements common to the set and all others.
+- (dash)	difference() 	Returns a new set with elements in the set that are not in the others.
+^ (carrot)	symmetric_difference() 	Returns a new set with elements in either the set or other but not both.
+
+In the preceding table, following each of the operators with an = will update the set rather than return a new set.
+
+The following example demonstrates working with sets.
+
+working_with_sets.py
+
+#!/usr/bin/env python3
+# Define the strings that are used multiple times
+prompts = ["Please enter some first names ", "again ",
+           "to delete "]
+end = "\n" * 2  # define value to use as end in prints
+
+# Using str.join to efficiently join together strings by
+# avoiding string concatentation
+msg1 = prompts[0]
+msg2 = "".join(prompts[:2])
+msg3 = "".join(prompts)
+
+name_list = input(msg1).split()
+unique_names = set(name_list)
+backedup_names = set(unique_names)
+print(unique_names, end=end)
+
+# Check to see if name exists prior to adding
+name_list = input(msg2).split()
+for name in name_list:
+    if name not in unique_names:
+        unique_names.add(name)
+    else:
+        print("\t", name, "already exists and is ignored")
+print(unique_names, end=end)
+
+# Update contents of set with contents of a list
+name_list = input(msg2).split()
+unique_names.update(name_list)
+print(unique_names, end=end)
+
+# Check to see if name exists prior to removing
+name_list = input(msg3).split()
+for name in name_list:
+    if name in unique_names:
+        unique_names.remove(name)
+
+# Discard words without checking first
+name_list = input(msg3).split()
+for name in name_list:
+    unique_names.discard(name)
+print(unique_names, end=end)
+
+# Check the relationship of one set to another
+print()
+print("Original:", backedup_names)
+print("Current :", unique_names, "\n")
+print("Original is subset of Current ? ",
+      backedup_names.issubset(unique_names))
+print("Current is superset of Original ? ",
+      unique_names.issuperset(backedup_names))
+
+# Pop each element from the set until it is empty
+print("Popping each name from set: ", unique_names)
+while unique_names:
+    print(unique_names.pop(), end=" ")
+print()
+
+The output of running the above program is shown below.
+
+$ python3 working_with_sets.py
+Please enter some first names Emma Declan
+{'Emma', 'Declan'}
+
+Please enter some first names again Emma Ava Mia Gavin Declan
+        Emma already exists and is ignored
+        Declan already exists and is ignored
+{'Gavin', 'Ava', 'Declan', 'Mia', 'Emma'}
+
+Please enter some first names again Ava Declan Jasmine Cole
+{'Cole', 'Gavin', 'Ava', 'Declan', 'Mia', 'Emma', 'Jasmine'}
+
+Please enter some first names again to delete Ava Mason Jasmine Sally
+Please enter some first names again to delete Gavin Sam Joey
+{'Cole', 'Declan', 'Mia', 'Emma'}
+
+Original: {'Emma', 'Declan'}
+Current : {'Cole', 'Declan', 'Mia', 'Emma'}
+
+Original is subset of Current ? True
+Current is superset of Original ? True
+Popping each name from set: {'Cole', 'Declan', 'Mia', 'Emma'}
+Cole Declan Mia Emma
+$
+
+The following example demonstrates the mathematical operators and methods of sets.
+
+set_operations.py
+
+#!/usr/bin/env python3
+a, b = [set('efgy'), set('exyz')]
+fmt = "Set a:{}\t\tSet b:{}"
+tab = "\t"
+print("The following operators return a new set")
+print("Leaving the original two sets unchanged")
+print(fmt.format(a, b))
+print(tab, "a | b:", a | b)  # union
+print(tab, "a & b:", a & b)  # intersection
+print(tab, "a - b:", a - b)  # difference
+print(tab, "b - a:", b - a)  # difference
+print(tab, "a ^ b:", a ^ b)  # symmetric difference
+print(fmt.format(a, b))
+print("\n", "*" * 75)
+
+print("\nThe '|=' operator modifies the original set")
+a, b = [set('efgy'), set('exyz')]
+a |= b
+print(tab, "a |= b:", a)  # union
+print(fmt.format(a, b))
+
+The output of the above program is shown next.
+
+$ python3 set_operations.py
+The following operators return a new set
+Leaving the original two sets unchanged
+Set a:{'e', 'y', 'g', 'f'}        Set b:{'e', 'y', 'z', 'x'}
+         a | b: {'g', 'f', 'y', 'z', 'e', 'x'}
+         a & b: {'e', 'y'}
+         a - b: {'f', 'g'}
+         b - a: {'z', 'x'}
+         a ^ b: {'z', 'g', 'f', 'x'}
+Set a:{'e', 'y', 'g', 'f'}         Set b:{'e', 'y', 'z', 'x'}
+
+**************************************************************
+
+The '|=' operator modifies the original set
+       a |= b: {'g', 'f', 'y', 'z', 'e', 'x'}
+Set a:{'g', 'f', 'y', 'z', 'e', 'x'}         Set b:{'e', 'y', 'z', 'x'}
+$
+
+Dictionaries
+
+A dict, or dictionary, is an unordered collection of entries.
+
+    Each entry contains a key-value pair.
+
+    Other languages refer to this data type as a hash, map, or associative array.
+
+Dictionary keys have to be both unique and hashable.
+
+    All of Python's immutable built-in objects are hashable and can be used as keys in a dictionary.
+
+Dictionaries can be created in several ways.
+
+    By placing a comma-separated list of key-value pairs within braces.
+
+ages = {'Jack': 51, 'Casey': 43, 'Derek': 27}
+positions = {1: "First", 2: "Second", 3: "Third"}
+empty = {}
+
+    By calling the dict() constructor.
+
+empty_also = dict()
+something = dict(key1='value 1', key2='value 2')
+fancy = dict([[8, 2], [5, 4], [3, 9]])
+
+Adding a key-value pair is done through assignment.
+
+adding_to_dictionary.py
+
+#!/usr/bin/env python3
+fruits = {"a": "Apples", "b": "Bananas"}
+print(fruits)
+fruits["s"] = "Strawberries"    # Add a new key-value pair
+print(fruits)
+
+The output of the above program is shown next.
+
+$ python3 adding_to_dictionary.py
+{'a': 'Apples', 'b': 'Bananas'}
+{'a': 'Apples', 'b': 'Bananas', 's': 'Strawberries'}
+$
+
+Dictionaries are designed as a data structure that provides fast lookups into the structure by key.
+
+    You can fetch a value from a dictionary by its key, as shown in the following example.
+
+    Note that attempting to supply a key that does not exist in the dictionary will result in a KeyError exception being raised.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> products = {'p1': 'Product 1', 'p2': 'Product 2', "p3": "Product 3"}
+>>> value = products["p1"]
+>>> print(value)
+Product 1
+>>> value = products["p4"]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 'p4'
+>>> exit()
+$
+
+    Dictionaries provide the get() method, as an alternative to using the [] syntax to retrieve a value by key.
+
+    In contrast to the [] syntax, the get() method does not generate a KeyError if the key passed as a parameter does not exist.
+
+    Instead, the get() method returns None by default if a key is not present.
+
+    If you pass a second argument to the get() method, then the method uses that argument as the return value if the key is not present.
+
+The following example demonstrates the use of the get() method with dictionaries.
+
+getting_from_dictionary.py
+
+#!/usr/bin/env python3
+reward_pts = {"Bryce": 500, "Heather": 2000, "Kaylie": 750}
+points = reward_pts.get("Bryce")      # returns 500
+print("Bryce:", points)
+points = reward_pts.get("Stephanie")  # returns None
+print("Stephanie:", points)
+
+# Supplying a different value to return other than None
+points = reward_pts.get("Stephanie", 0)  # returns 0
+print("Stephanie:", points)
+print("Current Dictionary Contents:", reward_pts)
+
+$ python3 getting_from_dictionary.py
+Bryce: 500
+Stephanie: None
+Stephanie: 0
+Current Dictionary Contents: {'Bryce': 500, 'Heather': 2000, 'Kaylie': 750}
+$
+
+To remove elements from a dictionary, you can use the pop() and popitem() methods.
+
+The general syntax for the pop() method is as follows.
+
+value = obj.pop(key[,default])
+
+    obj represents the dictionary from which to attempt to remove key and its associated value.
+
+    key represents the key of the key-value pair to attempt to remove.
+
+    default represents an optional value to return if key does not exist. A KeyError exception is raised if no default is given and the key does not exist.
+
+The general syntax for the popitem() method is as follows.
+
+a_tuple = obj.popitem()
+
+    obj represents the dictionary from which to remove something.
+
+    The popitem() method removes and returns an arbitrary key-value pair as a two-element tuple, but raises a KeyError if obj is empty.
+
+The following program demonstrates removing elements from a dictionary.
+
+removing_from_dictionary.py
+
+#!/usr/bin/env python3
+unknown = "Make is Unknown"
+cars = {'Mustang': 'Ford', 'Falcon': 'Ford',
+        'Camaro': 'Chevy', 'Corvette': 'Chevy',
+        'Eclipse': 'Mitsubishi', 'Integra': 'Acura'}
+
+make = cars.pop("Corvette")
+print(make)
+
+make = cars.pop("Accord", unknown)
+print(make)
+
+a_tuple = cars.popitem()
+print(a_tuple[0], a_tuple[1])
+
+model, make = cars.popitem()
+print(model, make)
+print(cars)
+
+The output of the above program is shown next.
+
+$ python3 removing_from_dictionary.py
+Chevy
+Make is Unknown
+Mustang Ford
+Camaro Chevy
+{'Falcon': 'Ford', 'Integra': 'Acura', 'Eclipse': 'Mitsubishi'}
+$
+
+When there is a need to loop through a dictionary, the following methods are useful.
+
+    The keys() method returns a view of the dictionary keys.
+
+    The values() method returns a view of the dictionary values.
+
+    The items() method returns a view of the dictionary items.
+
+    Each item in the view returned by items() is a two-element tuple consisting of a key and a value.
+
+The objects returned by the preceding methods are called view objects.
+
+    A view object provides a dynamic view of the dictionary's entries, which means that when the dictionary changes, the view reflects these changes.
+
+The views returned by the preceding methods are iterable, enabling them to be used in a for loop to iterate through all of its members.
+
+    Each of the views can also be converted to a list or a tuple by passing the view to a list() or tuple() constructor.
+
+    The views returned by keys() and items() are set-like views that can be converted to sets with the set() constructor.
+
+In addition to the preceding methods, which return views, a dictionary itself is iterable. When iterating over a dictionary, you iterate over the dictionary keys.
+
+You can also pass a dictionary to the len() function to determine how many key-value pairs exist in the dictionary.
+
+The example on the following page shows the various techniques of looping through a dictionary.
+
+processing_dictionaries.py
+
+#!/usr/bin/env python3
+reward_pts = {"Bryce": 500, "Heather": 2000, "Kaylie": 750,
+              "Amanda": 1350, "Casey": 2400, "Jason": 800,
+              "Kaylie": 25}
+rule, prefix = "-" * 75, "\n"
+
+print("Looping through dictionary", rule, sep=prefix)
+for name in reward_pts:
+    print(name, reward_pts[name])
+
+print(prefix, "Looping through keys()", rule, sep=prefix)
+for name in reward_pts.keys():
+    print(name, end=" ")
+
+print(prefix, "Looping through values()", rule, sep=prefix)
+for value in reward_pts.values():
+    print(value, end=" ")
+
+print(prefix, "Looping through items() as tuples", rule,
+      sep=prefix)
+for item in reward_pts.items():
+    print(item)
+
+fmt = "{:8}~{:>8}"
+print(prefix, "Items() unpacked as keys and values", rule,
+      sep=prefix)
+print(fmt.format("Name", "Points"))
+for name, points in reward_pts.items():
+    print(fmt.format(name, points))
+
+print(prefix, "Data types of returned views", rule,
+      sep=prefix)
+print("  keys()", type(reward_pts.keys()))
+print("values()", type(reward_pts.values()))
+print(" items()", type(reward_pts.items()))
+
+The output of the above program is shown on the following page.
+
+$ python3 processing_dictionaries.py
+Looping through dictionary
+---------------------------------------------------------------------------
+Bryce 500
+Heather 2000
+Kaylie 25
+Amanda 1350
+Casey 2400
+Jason 800
+
+
+Looping through keys()
+---------------------------------------------------------------------------
+Bryce Heather Kaylie Amanda Casey Jason
+
+Looping through values()
+---------------------------------------------------------------------------
+500 2000 25 1350 2400 800
+
+Looping through items() as tuples
+---------------------------------------------------------------------------
+('Bryce', 500)
+('Heather', 2000)
+('Kaylie', 25)
+('Amanda', 1350)
+('Casey', 2400)
+('Jason', 800)
+
+
+Items() unpacked as keys and values
+---------------------------------------------------------------------------
+Name    ~  Points
+Bryce   ~     500
+Heather ~    2000
+Kaylie  ~      25
+Amanda  ~    1350
+Casey   ~    2400
+Jason   ~     800
+
+
+Data types of returned views
+---------------------------------------------------------------------------
+  keys() <class 'dict_keys'>
+values() <class 'dict_values'>
+ items() <class 'dict_items'>
+$
+
+Sorting Collections
+
+Lists provide the sort() method, which sorts the list object in place.
+
+Alternatively, you can use the built-in sorted() function that takes an iterable object as its parameter and returns a new sorted list.
+
+There are many ways to use the sort() method and the sorted() function to sort data in various types of collections.
+
+    A keyword parameter, reverse=True, can be passed to reverse the natural order of the objects (typically being ascending order)
+
+    A customized sort can be achieved by passing another keyword parameter named key to specify a function of one argument that is used to extract a comparison key from each list element.
+
+The example that follows demonstrates basic sorting of a list in both ascending and descending order.
+
+basic_sorting.py
+
+#!/usr/bin/env python3
+numbers = [3, 1, -10, 54, 75, 29]
+words = ["Hello", "Goodbye", "goodbye", "hello"]
+label1, label2 = ("  Unsorted:", "  Sorted:")
+print("Basic sorting of a list.")
+print(label1, numbers, words)
+numbers.sort()
+words.sort()
+print(label2, numbers, words, "\n")
+numbers = [3, 1, -10, 54, 75, 29]
+
+print("Basic sorting of a list in reverse.")
+print(label1, numbers, words)
+numbers.sort(reverse=True)
+words.sort(reverse=True)
+print(label2, numbers, words, "\n")
+
+Note that calling sort() on a list updates the list in place.
+
+If the desire is to obtain a sorted version of the list and leave the original list unchanged, then the built-in sorted() function can be used instead.
+
+The built-in sorted() function returns a new sorted list from the items in iterable object that is passed to it as a parameter.
+
+This allows a new sorted list to be obtained from a list, tuple, set, or dict object.
+
+    The next example demonstrates sorting each of the above data types in ascending order.
+
+    Note that the program uses the __name__ class property, obtained by the type() function, to print the data type name.
+
+sorting_a_collection.py
+
+#!/usr/bin/env python3
+originals = [[3, 1, -10, 54, 75, 29],
+             ("Cheese", "Pepperoni", "Bacon", "Mushrooms"),
+             {"AL", "NY", "MD", "VA", "PA", "KY", "VT"},
+             {'New Hampshire': 'NH', 'Maryland': 'MD',
+              'Nevada': 'NV', 'Maine': 'ME'}]
+
+print("Original Collections")
+for collection in originals:
+    print(collection)
+print()
+for collection in originals:
+    sorted_list = sorted(collection)
+    print(type(collection).__name__, "sorted:", sorted_list)
+print()
+print("Original Collections")
+for collection in originals:
+    print(collection)
+
+It is important to realize that each of the original collections remains unchanged because the sorted() function always returns a new list object, without modifying the original collection being passed as an argument.
+
+The sorted() function also supports the reverse=True keyword argument to sort in descending order.
+
+Custom Sorting
+
+As mentioned earlier, a customized sort can be achieved by passing a named argument called key.
+
+    The value of the key keyword parameter should be a reference to a function that takes a single argument.
+
+    The return value of the function, when invoked by the sort() method or sorted() function, will then be used as the comparison key from each element in the list being sorted.
+
+The next example demonstrates sorting a list of strings by the length of each string.
+
+    This is accomplished by passing the built-in len() function as the keyword parameter value to the list's sort method sort(key=len) 
+
+custom_sorting.py
+
+#!/usr/bin/env python3
+names = """Smith Johnson Williams Brown Jones Miller Lee
+Garcia Rodriguez Wilson Martinez Anderson Taylor
+Thomas Hernandez Moore Martin Jackson Thompson
+White Lopez Davis"""
+names = names.split()
+# Primary sort by name ("Alphabetically)
+names.sort()
+# Secondary sort by length
+names.sort(key=len)
+print(names)
+
+The output of the above program is shown next.
+
+$ python3 custom_sorting.py
+['Lee', 'Brown', 'Davis', 'Jones', 'Lopez', 'Moore', 'Smith','White', 'Garcia',
+'Martin', 'Miller', 'Taylor', 'Thomas', 'Wilson', 'Jackson', 'Johnson', 'Anderson',
+'Martinez', 'Thompson', 'Williams','Hernandez', 'Rodriguez']
+$
+
+The two sorts together in the preceding example results in any names of the same length being sorted alphabetically.
+
+The next program shows how a custom function can be used as an argument to the sort() method.
+
+    The list to be sorted consists of full names, with the desire to sort the list by last name only.
+
+    This requires a custom function that can separate the last name from the string so it can be used as the sort criteria.
+
+custom_sort_function.py
+
+#!/usr/bin/env python3
+def the_last_word(a_string):
+    fmt = "For Input: {:18}    Sort Using: {}"
+    last_word = a_string.strip().split()[-1]
+    print(fmt.format(a_string, last_word))
+    return last_word
+
+
+names = """Ava Smith, Ethan Johnson, Abigail Williams, \
+Sophia Brown, Michael Jones, Emily Miller, Declan Lee"""
+names = names.split(", ")
+print(names)
+names.sort(key=the_last_word)
+print(names)
+
+The output of the above program is shown next.
+
+$ python3 custom_sort_list.py
+['Ava Smith', 'Ethan Johnson', 'Abigail Williams', 'Sophia Brown', 'Michael Jones',
+'Emily Miller', 'Declan Lee']
+For Input: Ava Smith          Sort Using: Smith
+For Input: Ethan Johnson      Sort Using: Johnson
+For Input: Abigail Williams   Sort Using: Williams
+For Input: Sophia Brown       Sort Using: Brown
+For Input: Michael Jones      Sort Using: Jones
+For Input: Emily Miller       Sort Using: Miller
+For Input: Declan Lee         Sort Using: Lee
+['Sophia Brown', 'Ethan Johnson', 'Michael Jones', 'Declan Lee', 'Emily Miller',
+'Ava Smith', 'Abigail Williams']
+$
+
+The following example demonstrates sorting the contents of a dictionary by values instead of keys.
+
+dictionary_sorts.py
+
+#!/usr/bin/env python3
+def get_value(akey):
+    return states[akey]
+
+
+states = {'New Hampshire': 'NH', 'Maryland': 'MD',
+          'Nevada': 'NV', 'Maine': 'ME'}
+
+# Sorted by Values
+long_names = list(states.keys())
+long_names.sort(key=get_value)
+for name in long_names:
+    print(name, states[name])
+print()
+
+# Sorted again by value without the need for custom function
+long_names = list(states.keys())
+long_names.sort(key=states.get)
+for name in long_names:
+    print(name, states[name])
+print()
+
+The output of the preceding program is shown next.
+
+$ python3 dictionary_sorts.py
+Maryland MD
+Maine ME
+New Hampshire NH
+Nevada NV
+
+Maryland MD
+Maine ME
+New Hampshire NH
+Nevada NV
+
+$
+
+Exercises
+
+The solution files for these exercises are in the AD141-apps repository, within the collections/solutions directory.
+Exercise 1
+
+Given the following two lists:
+
+first = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+second = ["day", "day", "sday", "nesday", "rsday", "day", "urday"]
+
+    Concatenate the two lists by index into a new list that, when printed, looks as follows:
+
+["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+Exercise 2
+
+Write a program that creates a loop asking the user to input a number.
+
+    Repeat this process until the user enters the value end.
+
+        The following can be used to loop through the user input.
+
+prompt = "Enter a number (or the word 'end' to quit) "
+while True:
+    data = input(prompt)
+    if data == "end":
+        break
+    #Remainder of while loop goes here
+
+    Add each iteration number to a list.
+
+    Just before the program ends, print the following:
+
+        The contents of the list on one line
+
+        The sum of the elements in the list on the second line
+
+Exercise 3
+
+Write a program that creates a loop asking the user to input a number.
+
+    Repeat this process until the user enters the value end.
+
+    Enter each number into a set.
+
+        Before you enter the number, verify if the number is already in the set.
+
+        If the number is already in the set, then update a counter that tracks how many entries are not added to the set.
+
+    Just before the program ends, print the following:
+
+        The contents of the set on one line
+
+        The number of elements that were NOT added to the set on the second line
+
+Exercise 4
+
+Use a single set to determine the number of unique words in the user's input.
+
+    You can use the same sample while loop from Exercise 1.
+
+        Each time through the loop, the individual words should be added to the single set.
+
+    When done looping, output the contents of the set sorted alphabetically.
+
+    Also, output the number of unique words.
+
+Exercise 5
+
+Use a dictionary to create a mapping from the digits 0-9 to the words zero, one, two, etc.
+
+    Next, ask the user to input a number.
+
+    If the user enters 1437, then the program should print one four three seven. 
+
+Exercise 6
+
+Rewrite Exercise 4 to count the frequency of each word in the user's input.
+
+    A dict provides the perfect data structure for this problem.
+
+        Let the words be the keys, and let the counts be the values.
+
+    Print the results sorted by the words.
+
+    Finally, print the results sorted by the counts.
