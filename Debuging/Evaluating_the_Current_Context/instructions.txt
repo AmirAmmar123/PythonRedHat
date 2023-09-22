@@ -1,0 +1,38 @@
+Evaluating the Current Context
+
+One of the benefits of breakpoints is the ability to stop the debugger to check the values of variables with the currently running context.
+
+You can use the p command to evaluate an expression in the current context, and print the expression value.
+
+The following example prints the value of the variables within the sum_args function at the breakpoint assigned to line 7 of the code.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call-
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) break 7
+Breakpoint 1 at /home/student/AD141/AD141-apps/debugger/examples/simple_program.py:7
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) p args, value, total
+((5, 3), 5, 0)
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) p args, value, total
+((5, 3), 3, 5)
+(Pdb) continue
+8
+>>> exit()
+$
+
+    You can use the clear command to clear all breakpoints set in the debugger.

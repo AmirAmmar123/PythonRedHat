@@ -1,0 +1,379 @@
+Chapter 12.  Debugging
+
+Debugging
+Summary
+
+Abstract
+
+Goal 	
+
+Detect and identify errors in Python applications.
+Objectives 	
+
+    Use the Python standard library's pdb module to debug Python programs.
+
+    Launch the debugger from an interactive Python shell.
+
+    Learn and use the various debugger commands within the debugging process.
+
+    Set breakpoints and evaluate the current context of the code being debugged.
+
+Sections 	
+
+    Debugging
+
+Debugging
+Objectives
+
+    Use the Python standard library's pdb module to debug Python programs.
+
+    Launch the debugger from an interactive Python shell.
+
+    Learn and use the various debugger commands within the debugging process.
+
+    Set breakpoints and evaluate the current context of the code being debugged.
+
+Introduction
+
+A common practice among developers is to insert print statements in various places of code to get an idea of what is happening in the application. This approach is not wrong, but it is often better to use a debugger.
+
+The pdb module defines an interactive source code debugger for Python programs.
+
+    It supports setting breakpoints within the code and single stepping line by line through Python code.
+
+    It also supports post-mortem debugging to better understand what happened when an exception was raised.
+
+There are several ways of starting the debugger:
+
+    From an interactive Python shell
+
+    From the command line
+
+All the exercises of this chapter use the following application for debugging purposes.
+
+simple_program.py
+
+#!/usr/bin/env python3
+
+
+def sum_args(*args):
+    total = 0
+    for value in args:
+        total += value
+    return total
+
+
+def main():
+    a = 5
+    b = 3
+    result = sum_args(a, b)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()
+
+References
+
+You can find more information about the pdb module in the Python documentation. https://docs.python.org/3/library/pdb.html
+
+Launching Debugger From the Interactive Shell
+
+    The following interactive shell demonstrates the use of the pdb.run() method to start the Python debugger.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb)
+
+    The preceding pdb.run(simple_program.main()') statement starts the debugger, and places the execution of the main() function under the control of the debugger.
+
+    The prompt in the debugger is (Pdb).
+
+    You can use the help command to list the available commands.
+
+Debugger Commands
+
+The step command executes the current line, and stops at the first possible occasion. Either in a function call, or on the next line in the current function.
+
+    The short version of the step command is s.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) s
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(12)main()
+-> a = 5
+(Pdb)
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(13)main()
+-> b = 3
+(Pdb)
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(14)main()
+-> result = sum_args(a, b)
+(Pdb)
+--Call--
+>
+/home/student/AD141/AD141-apps/debugger/examples/simple_program.py(4)sum_args()
+-> def sum_args(*args):
+(Pdb)
+
+Notice that you can press the enter key to reuse previous commands introduced in the debugger.
+
+While the step command steps through every line of code, the next command works slightly differently.
+
+The next command continues the execution of the application until one of the following circumstances occur:
+
+    The debugger reaches the next line in the current function.
+
+    The function returns.
+
+The difference between next and step is that step stops inside a called function, while next executes called functions, only stopping at the next line in the current function.
+
+    The short version of the next command is n.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(12)main()
+-> a = 5
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(13)main()
+-> b = 3
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(14)main()
+-> result = sum_args(a, b)
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(15)main()
+-> print(result)
+(Pdb) next
+8
+--Return--
+>
+/home/student/AD141/AD141-apps/debugger/examples/simple_program.py(15)main()->None
+-> print(result)
+(Pdb) quit
+>>>
+
+Notice that the next command did not enter the sum_args method call, contrary to the preceding step example.
+
+Listing Source
+
+You can use the list command to:
+
+    Display the source code around the current active line in the debugger.
+
+    Display source code included within a provided range of lines.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) list
+6           for value in args:
+7               total += value
+8           return total
+9
+10
+11 ->       def main():
+12        a = 5
+13        b = 3
+14        result = sum_args(a, b)
+15        print(result)
+16
+(Pdb) q
+>>> exit()
+$
+
+    The preceding list command displays 5 lines of code before, and after the currently active line.
+
+    The → symbol indicates the active line.
+
+The following example shows how you can use the list command with a range of lines.
+
+(Pdb) list 11,13
+11 ->       def main():
+12        a = 5
+13        b = 3
+(Pdb)
+
+Breakpoints
+
+Developers can use breakpoints to stop the debugger on specific points in the code.
+
+    You can use the break command to set a breakpoint.
+
+        The short version of the break command is b.
+
+    The continue command automatically continues the program execution until the next breakpoint. You can use it instead of the step or next commands.
+
+The following example sets a breakpoint on line 7 of the source code (total += value), and uses the continue command to jump to the next breakpoint.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call-
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) break 7
+Breakpoint 1 at
+/home/student/AD141/AD141-apps/debugger/examples/simple_program.py:7
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) continue
+8
+>>> exit()
+$
+
+In the preceding example, the last continue command causes the program to run to completion because there are no more breakpoints defined.
+
+Evaluating the Current Context
+
+One of the benefits of breakpoints is the ability to stop the debugger to check the values of variables with the currently running context.
+
+You can use the p command to evaluate an expression in the current context, and print the expression value.
+
+The following example prints the value of the variables within the sum_args function at the breakpoint assigned to line 7 of the code.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call-
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) break 7
+Breakpoint 1 at /home/student/AD141/AD141-apps/debugger/examples/simple_program.py:7
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) p args, value, total
+((5, 3), 5, 0)
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) p args, value, total
+((5, 3), 3, 5)
+(Pdb) continue
+8
+>>> exit()
+$
+
+    You can use the clear command to clear all breakpoints set in the debugger.
+
+Launching Debugger From the Command Line
+
+It is also very common to run the pdb module from the command line by using the -m option.
+
+$ python3 -m pdb simple_program.py
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(4)<module>()
+-> def sum_args(args):
+(Pdb) *next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)<module>()
+-> def main():
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(18)<module>()
+-> if name == "main":
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(19)<module>()
+-> main()
+(Pdb) next
+8
+--Return--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(19)<module>()->None
+-> main()
+(Pdb) next
+--Return--
+> <string>(1)<module>()->None
+(Pdb) next
+The program finished and will be restarted
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(4)<module>()
+-> def sum_args(args):
+(Pdb) *q
+$
+
+The debugger in the preceding example, begins controlling the program at the point at which the program is loaded.
+
+    This is different from the previous examples that always gained control of the program at the moment the main() method was about to be invoked.
+
+    Also notice how the use of the next command does not enter either the main or the sum_args functions.
+
+        This is due to the previous examples using the following Python statement:
+
+pdb.run('simple_program.main()')
+
+Exercises
+
+The solution files for these exercises are in the AD141-apps repository, within the debugger/solutions directory.
+Exercise 1
+
+Debug an example from previous chapters by starting the debugger from within the interactive Python shell.
+
+    Step through the code by using a combination of the step and next commands to get used to their behavior.
+
+Exercise 2
+
+Use the list command with no arguments at some point when debugging the preceding code again. Display the code around the currently executing line.
+
+    Repeat the process by passing a range large enough to the list command to display the entire file on the screen.
+
+Exercise 3
+
+Debug a program of your choice. Assign several breakpoints with the debugger by using the b command.
+
+    Use the continue command to stop the execution at the breakpoints.
+
+    Use the p command to print out the values of the variables available within the context of the current line.
+
+Exercise 4
+
+Repeat Exercise 3, but start the debugger from the command line by using the -m option.
+References
+
+You can find more information about the pdb module in the Python documentation. https://docs.python.org/3/library/pdb.html 

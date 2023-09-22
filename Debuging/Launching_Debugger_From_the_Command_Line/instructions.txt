@@ -1,0 +1,36 @@
+It is also very common to run the pdb module from the command line by using the -m option.
+
+$ python3 -m pdb simple_program.py
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(4)<module>()
+-> def sum_args(args):
+(Pdb) *next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)<module>()
+-> def main():
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(18)<module>()
+-> if name == "main":
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(19)<module>()
+-> main()
+(Pdb) next
+8
+--Return--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(19)<module>()->None
+-> main()
+(Pdb) next
+--Return--
+> <string>(1)<module>()->None
+(Pdb) next
+The program finished and will be restarted
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(4)<module>()
+-> def sum_args(args):
+(Pdb) *q
+$
+
+The debugger in the preceding example, begins controlling the program at the point at which the program is loaded.
+
+    This is different from the previous examples that always gained control of the program at the moment the main() method was about to be invoked.
+
+    Also notice how the use of the next command does not enter either the main or the sum_args functions.
+
+        This is due to the previous examples using the following Python statement:

@@ -1,0 +1,88 @@
+The step command executes the current line, and stops at the first possible occasion. Either in a function call, or on the next line in the current function.
+
+    The short version of the step command is s.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) s
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(12)main()
+-> a = 5
+(Pdb)
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(13)main()
+-> b = 3
+(Pdb)
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(14)main()
+-> result = sum_args(a, b)
+(Pdb)
+--Call--
+>
+/home/student/AD141/AD141-apps/debugger/examples/simple_program.py(4)sum_args()
+-> def sum_args(*args):
+(Pdb)
+
+Notice that you can press the enter key to reuse previous commands introduced in the debugger.
+
+While the step command steps through every line of code, the next command works slightly differently.
+
+The next command continues the execution of the application until one of the following circumstances occur:
+
+    The debugger reaches the next line in the current function.
+
+    The function returns.
+
+The difference between next and step is that step stops inside a called function, while next executes called functions, only stopping at the next line in the current function.
+
+    The short version of the next command is n.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(12)main()
+-> a = 5
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(13)main()
+-> b = 3
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(14)main()
+-> result = sum_args(a, b)
+(Pdb) next
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(15)main()
+-> print(result)
+(Pdb) next
+8
+--Return--
+>
+/home/student/AD141/AD141-apps/debugger/examples/simple_program.py(15)main()->None
+-> print(result)
+(Pdb) quit
+>>>
+
+Notice that the next command did not enter the sum_args method call, contrary to the preceding step example.
+
+Listing Source
+
+You can use the list command to:
+
+    Display the source code around the current active line in the debugger.
+
+    Display source code included within a provided range of lines.

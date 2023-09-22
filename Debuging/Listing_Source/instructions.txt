@@ -1,0 +1,45 @@
+You can use the list command to:
+
+    Display the source code around the current active line in the debugger.
+
+    Display source code included within a provided range of lines.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call--
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) list
+6           for value in args:
+7               total += value
+8           return total
+9
+10
+11 ->       def main():
+12        a = 5
+13        b = 3
+14        result = sum_args(a, b)
+15        print(result)
+16
+(Pdb) q
+>>> exit()
+$
+
+    The preceding list command displays 5 lines of code before, and after the currently active line.
+
+    The → symbol indicates the active line.
+
+The following example shows how you can use the list command with a range of lines.
+
+(Pdb) list 11,13
+11 ->       def main():
+12        a = 5
+13        b = 3
+(Pdb)

@@ -1,0 +1,39 @@
+Breakpoints
+
+Developers can use breakpoints to stop the debugger on specific points in the code.
+
+    You can use the break command to set a breakpoint.
+
+        The short version of the break command is b.
+
+    The continue command automatically continues the program execution until the next breakpoint. You can use it instead of the step or next commands.
+
+The following example sets a breakpoint on line 7 of the source code (total += value), and uses the continue command to jump to the next breakpoint.
+
+$ python3
+Python 3.9.10 (main, Feb 9 2022, 00:00:00)
+[GCC 11.2.1 20220127 (Red Hat 11.2.1-9)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pdb
+>>> import simple_program
+>>> pdb.run('simple_program.main()')
+> <string>(1)<module>()
+(Pdb) step
+--Call-
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(11)main()
+-> def main():
+(Pdb) break 7
+Breakpoint 1 at
+/home/student/AD141/AD141-apps/debugger/examples/simple_program.py:7
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) continue
+> /home/student/AD141/AD141-apps/debugger/examples/simple_program.py(7)sum_args()
+-> total += value
+(Pdb) continue
+8
+>>> exit()
+$
+
+In the preceding example, the last continue command causes the program to run to completion because there are no more breakpoints defined.
