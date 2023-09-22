@@ -1,0 +1,380 @@
+Chapter 11.  JSON
+
+JSON
+Summary
+
+Abstract
+
+Goal 	
+
+Integrate, process, and output JSON formatted data.
+Objectives 	
+
+    Understand what is JSON and its syntax.
+
+    Use the json module from the standard library to read and write JSON Data.
+
+Sections 	
+
+    JSON
+
+JSON
+Objectives
+
+    Understand what is JSON and its syntax.
+
+    Use the json module from the standard library to read and write JSON Data.
+
+What is JSON?
+
+    JSON stands for JavaScript Object Notation.
+
+    It is plain text that stores data in key-value pairs.
+
+    Self-describing text is easy to understand.
+
+    The text must conform to a set of rules.
+
+    It is a lightweight data interchange format.
+
+    JSON is less verbose than XML.
+
+    It is language independent.
+
+    It is commonly used to share data between applications.
+
+    RESTful APIs typically use JSON.
+
+JSON Syntax Requirements
+
+There are a few, simple rules to follow in JSON syntax:
+
+    Data is in key-value pairs separated with a colon.
+
+    Key-value pairs are comma separated.
+
+    Data is wrapped in curly braces.
+
+    Data can be nested.
+
+    Various data types can be serialized to JSON.
+
+    Arrays, hashes, numbers, strings, true, false, and null values can all be serialized.
+
+A simple example:
+
+{
+  "make":"GMC",
+  "model":"Canyon",
+  "mileage":37654
+}
+
+Sample JSON
+
+colors.json
+
+{
+  "colors": [
+    {
+      "name": "red",
+      "value": "#f00"
+    },
+    {
+      "name": "green",
+      "value": "#0f0"
+    },
+    {
+      "name": "blue",
+      "value": "#00f"
+    },
+    {
+      "name": "cyan",
+      "value": "#0ff"
+    },
+    {
+      "name": "magenta",
+      "value": "#f0f"
+    },
+    {
+      "name": "yellow",
+      "value": "#ff0"
+    },
+    {
+      "name": "black",
+      "value": "#000"
+    }
+  ]
+  
+}
+
+The json Module
+
+The Python standard library includes a module named json that provides an API for working with JSON data.
+
+Use the loads function to create a dictionary from a JSON formatted string.
+
+str, bytes, or bytearray objects can be converted to a dict.
+
+Use the dumps function to create a JSON formatted string from a dictionary.
+
+By default, the json module performs the following object conversions:
+JSON object	Python object
+object 	dict
+array 	list, tuple
+string 	str
+number (int) 	int
+number (real) 	float
+true 	True
+false 	False
+null 	None
+
+A simple example:
+
+dumps_loads.py
+
+#!/usr/bin/env python3
+import json
+
+data = '{"name": "Jill", "age": 33, "state": "MD"}'
+j = json.loads(data)
+print(type(j), j["state"])
+print(type(j["age"]))
+
+d = {"name": "Joe", "age": 57, "state": "PA"}
+j = json.dumps(d)
+print(type(j), j)
+
+The output of dumps_loads.py would be:
+
+<class 'dict'> MD
+<class 'int'>
+<class 'str'> {"state": "PA", "age": 57, "name": "Joe"}
+
+The loads Function
+
+The function raises a JSONDecodeError exception if the data being deserialized is invalid.
+
+The loads function has several optional parameters, that you can verify in the following table:
+s 	A JSON formatted str, bytes, or bytearray object to deserialize. This parameter is required.
+object_hook 	A function to invoke that implements custom decoding. The return value will be used in place of dict
+object_pairs_hook 	A function to invoke that implements custom decoding of ordered list of pairs. The return value will be used in place of dict. Takes priority over object_hook
+parse_float 	A function to apply to each JSON float being decoded. Default is float(data)
+parse_int 	A function to apply to each JSON int being decoded. Default is int(data)
+parse_constant 	Can be '-Infinity', 'Infinity', 'NaN' and is used to raise an exception when decoding invalid JSON numbers
+cls 	A custom JSONDecoder subclass to be used. Default is JSONDecoder
+**kw 	Keyword arguments to be passed to the constructor of the class specified in the cls parameter
+
+The following code shows how to use the loads function:
+
+loads.py
+
+#!/usr/bin/env python3
+import decimal
+import json
+
+data = '{"x": 0.1, "y": 0.2}'
+j = json.loads(data)
+j_x = j["x"]
+j_y = j["y"]
+print(type(j), type(j_x), j_x, sep=", ")
+print(j_x + j_y)
+
+j = json.loads(data, parse_float=decimal.Decimal)
+j_x = j["x"]
+j_y = j["y"]
+print(type(j), type(j_x), j_x, sep=", ")
+print(j_x + j_y)
+
+data = '{"name": "Jill", "age": 33, "state": "MD"}'
+j = json.loads(data, parse_int=str)
+print(type(j["age"]), j["age"], sep=", ")
+
+The output of the preceding program is:
+
+<class 'dict'>, <class 'float'>, 0.1
+0.30000000000000004
+<class 'dict'>, <class 'decimal.Decimal'>, 0.1
+0.3
+<class 'str'>, 33
+
+The load Function
+
+The load function deserializes JSON data stored in a text file.
+
+Its functionality is similar to the loads function, because it also raises a JSONDecodeError exception on invalid data, and shares most of the optional parameters with it.
+
+The load function also supports the fp parameter, which is the file containing JSON data.
+
+As of Python 3.6, a binary file can also be deserialized.
+
+The encondings supported by the load function are: UTF-8, UTF-16, or UTF-32.
+
+The following example shows how to use the load function:
+
+load_json_colors.py
+
+#!/usr/bin/env python3
+import decimal
+import json
+
+with open("colors.json", "r") as m:
+    j = json.load(m, parse_float=decimal.Decimal)
+
+print(type(j))
+print(type(j["colors"]))
+print(j["colors"][0]["name"])
+value = j["colors"][0]["value"]
+print(type(value), value)
+
+print()
+
+for color in j["colors"]:
+    if "e" in color["name"]:
+        print(color["name"])
+
+The output of the preceding program is:
+
+<class 'dict'>
+<class 'list'>
+red
+<class 'str'> #f00
+
+red
+green
+blue
+magenta
+yellow
+
+The dumps Function
+
+The dumps function converts a Python object into a string representation in JSON.
+
+The following table summarizes the available parameters for the dumps function.
+obj 	The object to serialize as a JSON formatted str. This parameter is required.
+skipkeys 	Ignore non-built-in data types as keys when True, raise a TypeError otherwise
+ensure_ascii 	Escape all non-ASCII characters when True, convert them as-is otherwise
+check_circular 	Enable or disable circular reference checks. If disabled then circular references raise an OverflowError
+allow_nan 	Use the JavaScript values (NaN, Infinity, -Infinity) for the range float values (nan, inf, -inf) when True, raise a ValueError, otherwise
+indent 	The indent level for JSON data. Valid values are a string, an integer , or None
+separators 	A tuple in the form of (item_separator, key_separator). The default is (', ', ': ')
+default 	A function to invoke for objects that cannot be serialized. The function should return a JSON encoded value or a TypeError. TypeError is raised when nothing is specified
+sort_keys 	Sort the output when True.
+cls 	Custom JSONEncoder subclass to use. Default is JSONEncoder
+**kw 	Keyword arguments to pass to the constructor of the class specified in the cls parameter
+
+The dump Function
+
+The dump function is similar to the dumps function but outputs the JSON representation to a file.
+
+The extra fp parameter controls the file to write the JSON.
+
+As keys in key-value pairs of JSON are always str, when converting a dict to JSON, the function converts all the keys of the dict to str.
+
+As a result, if a dict is converted to JSON and then back to a dict then the new dict may not equal the original.
+
+The following code shows how to use the dump function:
+
+tweedle_dump.py
+
+#!/usr/bin/env python3
+import decimal
+import json
+import requests
+
+seps = (',', ':')
+
+# get the current location of the ISS
+url = "http://api.open-notify.org/iss-now.json"
+response = requests.get(url)
+if response.status_code == 200:
+    data = json.loads(response.content.decode())
+    with open("api_data.json", "w") as r:
+        json.dump(data, r, skipkeys=True,
+                  separators=seps, indent=2)
+else:
+    print("response status:", response.status_code)
+
+print("Done")
+
+Running the preceding program creates a file with the following content:
+
+{
+  "message":"success",
+  "timestamp":1565112018,
+  "iss_position":{
+    "longitude":"110.7632",
+    "latitude":"-36.0800"
+  }
+}
+
+Note
+
+The preceding example uses the requests Python module to perform HTTP requests to the API.
+
+If the module is not installed then this example throws an error. To fix it install the module with pip install requests.
+
+Exercises
+
+The solution files for these exercises are in the AD141-apps repository, within the json/solutions directory.
+Exercise 1
+
+Create a program that reads books.json.
+
+    Prompt the user to enter a book title until they decide to quit.
+
+    If the title is in the JSON data, print the data for that book.
+
+    If the book is not in the JSON data, the program must indicate it.
+
+Sample output:
+
+Enter the title of a book (q to quit): Odyssey
+Odyssey Info:
+  year: 800
+  pages: 374
+  language: Greek
+  author: Homer
+  country: Greece
+
+Exercise 2
+
+Write a program that saves a dictionary as a JSON file.
+
+    The dictionary should contain the word frequency (words as keys, frequency as values) read from the cyclone file.
+
+    When saving the JSON file, the indentation level should be tab characters.
+
+    The program should display the word that appeared most often in the file.
+
+Sample output:
+
+'the' occurred 93 times
+
+Exercise 3
+
+Retrieve and operate on tasks from https://jsonplaceholder.typicode.com/todos.
+
+    Get the task list as JSON from the preceding API URL.
+
+    Save the data to two local files, one that contains completed tasks and another one that contains incomplete tasks.
+
+    The JSON data written to the files should be formatted as minimally as possible (no spaces, newlines, etc).
+
+    The program should display the number of tasks we have completed. Sample output:
+
+90 of 200 tasks are done
+
+Exercise 4
+
+The following API endpoint returns JSON data that contains a random trivia fact about a number sent to it: http://numbersapi.com/a_number/?json&notfound=floor.
+
+    Write a program that makes an HTTP request to the API.
+
+    The program should display the fact that was returned in the JSON data.
+
+Another endpoint will return mathematical data about a number:
+
+    http://numbersapi.com/a_number/math/?json&notfound=floor 
+
+sending request http://numbersapi.com/42/?json&notfound=floor...
+42 is the result given by the web search engines Google, Wolfram Alpha and Bing when the query \"the answer to life the universe and everything\" is entered as a search.
